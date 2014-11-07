@@ -1,3 +1,0 @@
-SNS-project
-===========
-Hello World!
