@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/music_list_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    tools:context=".MusicEvent$PlaceholderFragmentList"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/card_background">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/cher"
+            android:scaleType="centerCrop"
+            android:scrollY="-100dp"
+            />
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/list_title_text"
+                android:text="@string/action_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"/>
+            <TextView
+                android:id="@+id/list_subtitle_text"
+                android:text="@string/action_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"/>
+            </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
