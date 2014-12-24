@@ -1,86 +1,74 @@
 package uk.ac.ucl.sns.group4.snsmusic;
 
-import java.net.URL;
-import java.util.Date;
-
 /**
- * Created by andi on 18/12/2014.
+ * Track data Placeholder
  */
 public class Track {
-    private String mbid,name,artist,artistMbid,album,albumMbid;
-    private int trackNo;
-    private URL url;
-    private Date releaseDate;
 
-    public String getMbid() {
-        return mbid;
+    private String trackName;
+    private String artistName;
+    private String imageUrl;
+    private String artistUrl;
+    private String trackUrl;
+    private String artistId;
+    private String trackId;
+
+    // Getter and Setter
+
+
+    public String getTrackName() {
+        return trackName;
     }
 
-    public void setMbid(String mbid) {
-        this.mbid = mbid;
+    public void setTrackName(String trackName) {
+        this.trackName = trackName;
     }
 
-    public String getName() {
-        return name;
+    public String getArtistName() {
+        return artistName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
     }
 
-    public String getArtist() {
-        return artist;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setArtist(String artist) {
-        this.artist = artist;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public String getArtistMbid() {
-        return artistMbid;
+    public String getArtistUrl() {
+        return artistUrl;
     }
 
-    public void setArtistMbid(String artistMbid) {
-        this.artistMbid = artistMbid;
+    public void setArtistUrl(String artistUrl) {
+        this.artistUrl = artistUrl;
     }
 
-    public String getAlbum() {
-        return album;
+    public String getTrackUrl() {
+        return trackUrl;
     }
 
-    public void setAlbum(String album) {
-        this.album = album;
+    public void setTrackUrl(String trackUrl) {
+        this.trackUrl = trackUrl;
     }
 
-    public String getAlbumMbid() {
-        return albumMbid;
+    public String getArtistId() {
+        return artistId;
     }
 
-    public void setAlbumMbid(String albumMbid) {
-        this.albumMbid = albumMbid;
+    public void setArtistId(String artistId) {
+        this.artistId = artistId;
     }
 
-    public int getTrackNo() {
-        return trackNo;
+    public String getTrackId() {
+        return trackId;
     }
 
-    public void setTrackNo(int trackNo) {
-        this.trackNo = trackNo;
-    }
-
-    public URL getUrl() {
-        return url;
-    }
-
-    public void setUrl(URL url) {
-        this.url = url;
-    }
-
-    public Date getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setTrackId(String trackId) {
+        this.trackId = trackId;
     }
 }

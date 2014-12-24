@@ -4,25 +4,22 @@
         <shape android:shape="rectangle"
             android:dither="true">
 
-            <corners android:radius="1dp"/>
+            <corners android:radius="2dp"/>
 
             <solid android:color="#ccc" />
 
         </shape>
     </item>
 
-    <item android:bottom="1dp">
+    <item android:bottom="2dp">
         <shape android:shape="rectangle"
             android:dither="true">
 
-            <corners android:radius="1dp" />
+            <corners android:radius="2dp" />
 
             <solid android:color="@android:color/white" />
 
-            <padding android:bottom="2dp"
-                android:left="2dp"
-                android:right="2dp"
-                android:top="2dp" />
+
         </shape>
     </item>
 </layer-list>
