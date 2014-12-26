@@ -63,9 +63,9 @@ public class GeoMetro {
                 }
             }
         }  catch (JSONException e) {
-            Log.e("SNS", "Fail to parse GeoChartTrack " + location, e);
+            Log.e("SNS", "Fail to parse GeoMetro " + location, e);
         }  catch (IOException e) {
-            Log.e("SNS", "Fail to fetch GeoChartTrack " + location, e);}
+            Log.e("SNS", "Fail to fetch GeoMetro " + location, e);}
 
         return mItems;
     }

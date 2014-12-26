@@ -110,6 +110,7 @@ public class ImageDownloader<Token> extends HandlerThread {
                     } catch (JSONException ee) {
                     } catch (IOException ee) {
                     }
+
                 }
                 if (urlFetch == null){
                     bitmap = BitmapFactory.decodeResource(Resources.getSystem(),R.drawable.placeholder);

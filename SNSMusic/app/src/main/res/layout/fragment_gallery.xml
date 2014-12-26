@@ -61,7 +61,8 @@
             android:outAnimation="@anim/abc_fade_out"
             android:animationCache="true"
             android:measureAllChildren="false"
-            android:animateFirstView="true">
+            android:animateFirstView="true"
+            android:clickable="true">
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"

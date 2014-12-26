@@ -2,6 +2,7 @@ package uk.ac.ucl.sns.group4.snsmusic;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+
+import org.apache.commons.logging.Log;
 
 import java.util.ArrayList;
 
@@ -46,6 +49,7 @@ public class GeoChartGalleryFragment extends Fragment {
     ImageDownloader imageThread;
     String location = "London";
     String country = "United Kingdom";
+    int countryInitial,locationInitial;
 
 
     @Override
@@ -81,10 +85,20 @@ public class GeoChartGalleryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_gallery, container, false);
 
 
+
         // Setup Track Gallery
         mGridView = (GridView)v.findViewById(R.id.gridView);
         mGridView.setEmptyView(v.findViewById(R.id.event_preview_viewFlipper));
         setupAdapter();
+        ViewFlipper viewFlipper = (ViewFlipper) v.findViewById(R.id.event_preview_viewFlipper);
+        viewFlipper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItems = null;
+                new SearchTask().execute(country,location,page + "");
+                new MetroTask().execute();
+            }
+        });
 
         // If track click (not yet implemented) - andi
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -92,9 +106,16 @@ public class GeoChartGalleryFragment extends Fragment {
             public void onItemClick(AdapterView<?> gridView, View view, int pos,
                                     long id) {
                 Track item = mItems.get(pos);
+                Intent intent = new Intent(Intent.ACTION_SEARCH);
+                intent.setPackage("com.google.android.youtube");
+                intent.putExtra("query", item.getArtistName()+" "+item.getTrackName());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
 
             }
         });
+
+
 
         countrySpinner = (Spinner) v.findViewById(R.id.gallery_detail1_spinner);
         metroSpinner = (Spinner) v.findViewById(R.id.gallery_detail2_spinner);
@@ -105,6 +126,16 @@ public class GeoChartGalleryFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
     // shutdown thread
     @Override
@@ -148,8 +179,11 @@ public class GeoChartGalleryFragment extends Fragment {
         if (getActivity() == null || mGridView == null) return;
 
         if (mItems != null) {
+
             // create adapter
             mGridView.setAdapter(new ItemAdapter(mItems));
+
+
 
             // to get more data if user already reach end of chart
             mGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -200,7 +234,11 @@ public class GeoChartGalleryFragment extends Fragment {
     void setupCountrySpinner() {
         if (getActivity() == null || countrySpinner == null | metroSpinner == null) return;
 
-        if (mMetro != null) {
+        if (mMetro != null ) {
+            if (mMetro.size() ==0)
+            {
+                return;
+            }
 
             //get country array from Metro object
             ArrayList<String> countries = new ArrayList<String>();
@@ -211,17 +249,26 @@ public class GeoChartGalleryFragment extends Fragment {
             // add adapter
             countrySpinner.setAdapter(new SpinnerAdapter(countries));
 
+            countryInitial = countries.indexOf(country);
+            locationInitial = mMetro.get(countryInitial).getLocation().indexOf(location);
+            countrySpinner.setSelection(countries.indexOf(country));
+
             // if country selected choose first metro and refresh gallery
             countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    setupMetroSpinner(position,0);
-                    country = mMetro.get(position).getCountry();
-                    location = mMetro.get(position).getLocation().get(0);
-                    page = 1;
-                    mItems = null;
-                    setupAdapter();
-                    new SearchTask().execute(country,location,page + "");
+                    if (!(isLoading || countryInitial == position)) {
+                        countryInitial = position;
+                        setupMetroSpinner(position,0);
+                        country = mMetro.get(position).getCountry();
+                        location = mMetro.get(position).getLocation().get(0);
+                        page = 1;
+                        mItems = null;
+                        setupAdapter();
+                        new SearchTask().execute(country, location, page + "");
+                    }
                 }
 
                 @Override
@@ -229,9 +276,9 @@ public class GeoChartGalleryFragment extends Fragment {
 
                 }
             });
-            countrySpinner.setSelection(countries.indexOf(country));
 
-            setupMetroSpinner(countries.indexOf(country),mMetro.get(countries.indexOf(country)).getLocation().indexOf(location));
+
+            setupMetroSpinner(countryInitial,locationInitial);
 
         }
 
@@ -255,11 +302,14 @@ public class GeoChartGalleryFragment extends Fragment {
                 // if metro selected refresh gallery
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    location = mMetro.get(countrySpinner.getSelectedItemPosition()).getLocation().get(position);
-                    page = 1;
-                    mItems = null;
-                    setupAdapter();
-                    new SearchTask().execute(country,location,page + "");
+                    if(!(isLoading || locationInitial == position)){
+                        locationInitial = position;
+                        location = mMetro.get(countrySpinner.getSelectedItemPosition()).getLocation().get(position);
+                        page = 1;
+                        mItems = null;
+                        setupAdapter();
+                        new SearchTask().execute(country,location,page + "");
+                    }
                 }
 
                 @Override

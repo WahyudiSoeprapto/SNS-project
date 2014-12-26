@@ -29,6 +29,7 @@ public class MainActivity extends FragmentActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //getActionBar().setDisplayShowHomeEnabled(false);
 
         // Create the adapter that will return a fragment for each of the three
