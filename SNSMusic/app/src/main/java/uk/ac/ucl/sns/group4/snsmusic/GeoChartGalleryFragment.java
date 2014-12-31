@@ -1,9 +1,11 @@
 package uk.ac.ucl.sns.group4.snsmusic;
 
 import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,6 +26,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -106,15 +112,23 @@ public class GeoChartGalleryFragment extends Fragment {
             public void onItemClick(AdapterView<?> gridView, View view, int pos,
                                     long id) {
                 Track item = mItems.get(pos);
+                try {
                 Intent intent = new Intent(Intent.ACTION_SEARCH);
                 intent.setPackage("com.google.android.youtube");
                 intent.putExtra("query", item.getArtistName()+" "+item.getTrackName());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                } catch (ActivityNotFoundException e){
+                    String url = "https://www.youtube.com/results?search_query="+item.getArtistName().replace(" ","+")+"+"+item.getTrackName().replace(" ","+");
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
+
+                }
+
 
             }
         });
-
 
 
         countrySpinner = (Spinner) v.findViewById(R.id.gallery_detail1_spinner);
@@ -145,25 +159,6 @@ public class GeoChartGalleryFragment extends Fragment {
 
     }
 
-    // for menu not yet implemented - andi
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_geochart, menu);
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getActivity().getComponentName()));
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
 
     // shutdown thread
     @Override
@@ -187,6 +182,7 @@ public class GeoChartGalleryFragment extends Fragment {
 
             // to get more data if user already reach end of chart
             mGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                private int lastFirstVisibleItem = 0;
                 private int currentFirstVisibleItem;
                 private int currentVisibleItemCount;
                 private int currentScrollState;
@@ -218,6 +214,9 @@ public class GeoChartGalleryFragment extends Fragment {
 
                         }
                     }
+
+
+
 
 
                 }

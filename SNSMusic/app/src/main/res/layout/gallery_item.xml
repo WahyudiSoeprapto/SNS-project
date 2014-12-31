@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:background="@drawable/number_background"
+        android:textColor="@android:color/white"
         android:gravity="center"
         android:layout_marginTop="4dp"
         android:layout_marginRight="4dp"
@@ -53,8 +54,12 @@
                 android:id="@+id/detail_1_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
                 android:gravity="bottom"
-                android:background="#CCFFFFFF"
+                android:background="#DDFFFFFF"
                 android:layout_alignParentBottom="true"/>
         </LinearLayout>
         <LinearLayout
@@ -74,8 +79,12 @@
                 android:id="@+id/detail_2_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
                 android:gravity="bottom"
-                android:background="#CCFFFFFF"
+                android:background="#DDFFFFFF"
                 android:layout_alignParentBottom="true"/>
         </LinearLayout>
     </ViewFlipper>

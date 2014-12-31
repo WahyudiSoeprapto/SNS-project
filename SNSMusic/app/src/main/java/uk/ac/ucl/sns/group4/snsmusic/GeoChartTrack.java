@@ -30,7 +30,7 @@ public class GeoChartTrack {
                 "http://ws.audioscrobbler.com/2.0/?method=geo.getmetrotrackchart&country="+country.replace(" ","+")+"&metro="+location.replace(" ","+");
         // Fetch and Parse data to Track object
         try{
-            JSONObject responseObj = new JSONObject(new DownloadData().getUrl(fetchUrl, 100, page));
+            JSONObject responseObj = new JSONObject(new DownloadData().getUrl(fetchUrl, 72, page));
             JSONObject topTracksObj = responseObj.getJSONObject("toptracks");
             JSONArray tracks = topTracksObj.getJSONArray("track");
             for (int i = 0; i < tracks.length(); i++) {

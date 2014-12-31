@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Query valid Country and Location on Last FM
@@ -49,6 +50,7 @@ public class GeoMetro {
                 else {
                     item = new Metro();
                     item.setCountry(oldCountry);
+                    Collections.sort(metros);
                     item.setLocation(metros);
                     mItems.add(item);
                     oldCountry = country;
@@ -58,6 +60,7 @@ public class GeoMetro {
                 if (i == metro.length()-1){
                     item = new Metro();
                     item.setCountry(oldCountry);
+                    Collections.sort(metros);
                     item.setLocation(metros);
                     mItems.add(item);
                 }

@@ -1,5 +1,6 @@
 package uk.ac.ucl.sns.group4.snsmusic;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -10,6 +11,8 @@ import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.android.common.view.SlidingTabLayout;
 
 /* Main Activity
  *
@@ -22,6 +25,7 @@ import android.view.MenuItem;
 public class MainActivity extends FragmentActivity  {
 
     SectionsPagerAdapter mSectionsPagerAdapter;
+    SlidingTabLayout mSlidingTabLayout;
 
     ViewPager mViewPager;
 
@@ -55,36 +59,31 @@ public class MainActivity extends FragmentActivity  {
 
             }
         });
-        PagerTabStrip tabStrip = (PagerTabStrip) findViewById(R.id.pager_tab_strip);
-        tabStrip.setTextSize(TypedValue.COMPLEX_UNIT_DIP,18);
 
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+        //mSlidingTabLayout.setCustomTabView(R.layout.custom_tab_title, R.id.tabtext);
+        mSlidingTabLayout.setViewPager(mViewPager);
+        //PagerTabStrip tabStrip = (PagerTabStrip) findViewById(R.id.pager_tab_strip);
+        //tabStrip.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
+
+        mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(android.R.color.white);
+            }
+
+            @Override
+            public int getDividerColor(int position) {
+                return getResources().getColor(android.R.color.white);
+            }
+        });
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            getWindow().setStatusBarColor(getResources().getColor(R.color.purple));
 
     }
-
-    // Action Bar in Main Activity created by Android Studio
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.search) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
 
     // Pager Fragment in Main Activity created by Android Studio
 
@@ -104,6 +103,9 @@ public class MainActivity extends FragmentActivity  {
                 case 0:
                     fragment = new GeoChartGalleryFragment();
                     break;
+                case 1:
+                    fragment = new GeoEventFragment();
+                    break;
             }
 
 
@@ -114,8 +116,8 @@ public class MainActivity extends FragmentActivity  {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 1;
+            // Show 1 total pages.
+            return 2;
         }
 
         @Override
@@ -125,7 +127,7 @@ public class MainActivity extends FragmentActivity  {
                 case 0:
                     return getString(R.string.tab_chart);
                 case 1:
-                    return getString(R.string.tab_artist);
+                    return getString(R.string.tab_event);
 
             }
             return null;

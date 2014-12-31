@@ -120,7 +120,12 @@ public class ImageDownloader<Token> extends HandlerThread {
                             .decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
                 }
 
-                Log.i(TAG, "Bitmap created");
+                Log.i(TAG, "Bitmap created"+url);
+                if (bitmap == null) {
+                    return;
+                }
+
+
                 mCache.put(url, bitmap);
             }
             mResponseHandler.post(new Runnable() {
