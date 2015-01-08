@@ -21,6 +21,13 @@ package="uk.ac.ucl.sns.group4.snsmusic" >
             android:resource="@xml/searchable" />
 
     </activity>
+    <activity android:name=".LyricsMainActivity"
+              android:label="Lyrics"
+              android:parentActivityName=".MainActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".MainActivity" />
+    </activity>
 </application>
 
 </manifest>

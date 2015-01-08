@@ -111,8 +111,22 @@ public class GeoChartGalleryFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> gridView, View view, int pos,
                                     long id) {
+
                 Track item = mItems.get(pos);
-                try {
+                Bitmap bitmap = null;
+                if (item.getImageUrl() == null) {
+                    bitmap = imageThread.getBitmap(item.getArtistName());
+                } else {
+                    bitmap = imageThread.getBitmap(item.getImageUrl());
+                }
+
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), LyricsMainActivity.class);
+                intent.putExtra("AA", bitmap);
+                intent.putExtra(LyricsMainActivity.TRACK_OBJECT, item);
+                startActivity(intent);
+
+                /*try {
                 Intent intent = new Intent(Intent.ACTION_SEARCH);
                 intent.setPackage("com.google.android.youtube");
                 intent.putExtra("query", item.getArtistName()+" "+item.getTrackName());
@@ -124,7 +138,7 @@ public class GeoChartGalleryFragment extends Fragment {
                     intent.setData(Uri.parse(url));
                     startActivity(intent);
 
-                }
+                }*/
 
 
             }

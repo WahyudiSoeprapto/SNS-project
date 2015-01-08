@@ -1,9 +1,11 @@
 package uk.ac.ucl.sns.group4.snsmusic;
 
+import java.io.Serializable;
+
 /**
  * Track data Placeholder
  */
-public class Track {
+public class Track implements Serializable {
 
     private String trackName;
     private String artistName;

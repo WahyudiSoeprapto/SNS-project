@@ -147,5 +147,8 @@ public class ImageDownloader<Token> extends HandlerThread {
         requestMap.clear();
     }
 
+    public Bitmap getBitmap (String url) {
+        return mCache.get(url);
+    }
 
 }

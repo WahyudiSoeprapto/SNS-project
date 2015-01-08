@@ -12,5 +12,10 @@
     <string name="tab_chart">Chart</string>
 
 
+    <string name="font_family">Arial</string>
+    <color name="background">#FAF1F1</color>
+    <color name="background0">#FFFFFF</color>
+
+
 
 </resources>
