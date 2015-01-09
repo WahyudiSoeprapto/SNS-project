@@ -432,7 +432,7 @@ public class GeoChartGalleryFragment extends Fragment {
 
         @Override
         protected ArrayList<String> doInBackground(String... params) {
-            ArrayList<String> gpsLocationMetro = null;
+            ArrayList<String> gpsLocationMetro = new ArrayList<String>();
 
             if (gpsLocation != null) {
                 double latitude = gpsLocation.getLatitude();
@@ -452,8 +452,9 @@ public class GeoChartGalleryFragment extends Fragment {
                 location = strings.get(1);
             }
             // download initial data track for London, United Kingdom and all available Metro
-            new SearchTask().execute(country,location,page + "");
             new MetroTask().execute();
+            new SearchTask().execute(country,location,page + "");
+
 
 
         }

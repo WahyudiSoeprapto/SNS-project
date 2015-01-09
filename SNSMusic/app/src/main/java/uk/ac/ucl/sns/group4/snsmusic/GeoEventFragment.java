@@ -44,8 +44,7 @@ public class GeoEventFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        setRetainInstance(true);
 
 
 
@@ -111,9 +110,9 @@ public class GeoEventFragment extends Fragment {
             setupListAdapter();
             LatLng latLng = new LatLng(latitude, longitude);
 
-            googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(mEvents.get(0).getVenueLatitude()),Double.parseDouble(mEvents.get(0).getVenueLongitude()))).title(mEvents.get(0).getEventTitle()));
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(mEvents.get(0).getVenueLatitude()), Double.parseDouble(mEvents.get(0).getVenueLongitude()))).title(mEvents.get(0).getEventTitle()));
             googleMap.addMarker(new MarkerOptions().position(latLng));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,20));
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         }
