@@ -48,11 +48,10 @@
 
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
         <ViewFlipper
-            android:id="@+id/event_preview_viewFlipper"
+            android:id="@+id/gallery_loading_viewFlipper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autoStart="true"
@@ -75,13 +74,9 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-
-
                 android:src="@drawable/ic_load_c"/>
-
-
-
         </ViewFlipper>
+
         <GridView
 
             android:id="@+id/gridView"
@@ -96,5 +91,19 @@
             android:background="#e0e0e0">
 
         </GridView>
+
+        <TextView
+            android:id="@+id/retry_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fail_fetch"
+            android:layout_alignParentBottom="true"
+            android:textSize="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@android:color/white"
+            android:padding="5dp"
+            android:visibility="gone"
+            />
     </RelativeLayout>
 </LinearLayout>

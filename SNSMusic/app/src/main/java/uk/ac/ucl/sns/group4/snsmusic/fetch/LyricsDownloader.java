@@ -1,12 +1,10 @@
-package uk.ac.ucl.sns.group4.snsmusic.parser;
+package uk.ac.ucl.sns.group4.snsmusic.fetch;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import uk.ac.ucl.sns.group4.snsmusic.DownloadData;
 
 /**
  * Created by oljas on 05/01/15.

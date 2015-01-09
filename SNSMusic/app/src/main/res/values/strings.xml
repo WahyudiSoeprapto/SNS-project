@@ -8,14 +8,17 @@
     <string name="search_hint">City</string>
     <string name="search_hint2">Name</string>
     <string name="tab_event">Event</string>
-    <string name="tab_artist">Artist</string>
+    <string name="artist">Artist</string>
+    <string name="track">Track</string>
     <string name="tab_chart">Chart</string>
-
+    <string name="all_countries">All Countries</string>
+    <string name="all_cities">All Cities</string>
+    <string name="fail_fetch">Problem on connecting server. Please check Internet connections. Tap here to try again</string>
+    <string name="youtube">Youtube</string>
+    <string name="lyrics">Lyric</string>
+    <string name="loading">Loading ...</string>
 
     <string name="font_family">Arial</string>
-    <color name="background">#FAF1F1</color>
-    <color name="background0">#FFFFFF</color>
-
 
 
 </resources>

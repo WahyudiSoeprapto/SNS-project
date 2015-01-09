@@ -1,4 +1,4 @@
-package uk.ac.ucl.sns.group4.snsmusic;
+package uk.ac.ucl.sns.group4.snsmusic.fetch;
 
 import android.util.Log;
 
@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import uk.ac.ucl.sns.group4.snsmusic.model.Metro;
 
 /**
  * Query valid Country and Location on Last FM
@@ -51,6 +53,7 @@ public class GeoMetro {
                     item = new Metro();
                     item.setCountry(oldCountry);
                     Collections.sort(metros);
+                    metros.add(0,"-city");
                     item.setLocation(metros);
                     mItems.add(item);
                     oldCountry = country;
@@ -65,6 +68,12 @@ public class GeoMetro {
                     mItems.add(item);
                 }
             }
+            item = new Metro();
+            item.setCountry("-country");
+            metros = new ArrayList<String>();
+            metros.add("-city");
+            item.setLocation(metros);
+            mItems.add(0,item);
         }  catch (JSONException e) {
             Log.e("SNS", "Fail to parse GeoMetro " + location, e);
         }  catch (IOException e) {

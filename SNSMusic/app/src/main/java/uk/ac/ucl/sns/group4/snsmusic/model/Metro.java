@@ -1,4 +1,4 @@
-package uk.ac.ucl.sns.group4.snsmusic;
+package uk.ac.ucl.sns.group4.snsmusic.model;
 
 
 

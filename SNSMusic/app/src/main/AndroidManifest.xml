@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 package="uk.ac.ucl.sns.group4.snsmusic" >
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 <uses-permission android:name="android.permission.INTERNET" />
 <application
     android:allowBackup="true"
@@ -12,22 +13,21 @@ package="uk.ac.ucl.sns.group4.snsmusic" >
         android:label="@string/app_name" >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
-
             <category android:name="android.intent.category.LAUNCHER" />
             <action android:name="android.intent.action.SEARCH" />
-
         </intent-filter>
         <meta-data android:name="android.app.searchable"
             android:resource="@xml/searchable" />
-
     </activity>
-    <activity android:name=".LyricsMainActivity"
-              android:label="Lyrics"
-              android:parentActivityName=".MainActivity">
+
+    <activity android:name=".LyricsActivity"
+        android:label="Lyrics"
+        android:parentActivityName=".MainActivity">
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".MainActivity" />
     </activity>
+
 </application>
 
 </manifest>

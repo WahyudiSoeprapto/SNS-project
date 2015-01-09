@@ -1,7 +1,5 @@
-package uk.ac.ucl.sns.group4.snsmusic.parser;
+package uk.ac.ucl.sns.group4.snsmusic.fetch;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;
@@ -9,8 +7,6 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.List;
-
-import uk.ac.ucl.sns.group4.snsmusic.model.Lyrics;
 
 /**
  * Created by oljas on 05/01/15.
@@ -49,7 +45,7 @@ public class LyricsParser {
         for (int i = 2; i < lyricNodes.size() - 2; i++) {
             Node node = lyricNodes.get(i);
 
-            if (lyricNodes.get(i).toString().equals("<br />")) {
+            if (lyricNodes.get(i).toString().equals("<br />") ||lyricNodes.get(i).toString().equals("<br>") ) {
                 lyrics = lyrics + "\n";
             } else if (lyricNodes.get(i).toString().startsWith("<i")) {
                 lyrics = lyrics + "";

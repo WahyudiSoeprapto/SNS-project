@@ -5,23 +5,21 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Handler;
-
-
-import uk.ac.ucl.sns.group4.snsmusic.parser.LyricsParser;
+import uk.ac.ucl.sns.group4.snsmusic.fetch.LyricsParser;
+import uk.ac.ucl.sns.group4.snsmusic.model.Track;
 
 
 /**
  * Created by oljas on 01/01/15.
  */
-public class LyricsMainActivity extends Activity {
+public class LyricsActivity extends Activity {
     public static String TRACK_OBJECT = "uk.ac.ucl.sns.group4.snsmusic.LyricsMainActivity.TRACK_OBJECT";
     private Track track;
-    private ImageView musicImage;
+    private ImageView musicImage,backImage;
     private TextView artist;
     private TextView title;
     private TextView songLyrics;
@@ -29,10 +27,10 @@ public class LyricsMainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lyrics);
+        setContentView(R.layout.activity_lyrics);
 
         Intent intent = getIntent();
-        track = (Track) intent.getSerializableExtra(LyricsMainActivity.TRACK_OBJECT);
+        track = (Track) intent.getSerializableExtra(LyricsActivity.TRACK_OBJECT);
         Bitmap bitmap = (Bitmap) intent.getParcelableExtra("AA");
         musicImage = (ImageView) findViewById(R.id.lyrics_image);
         artist = (TextView) findViewById(R.id.lyrics_artist);
@@ -52,6 +50,13 @@ public class LyricsMainActivity extends Activity {
         } else {
             new MyTask().execute();
         }
+        backImage = (ImageView) findViewById(R.id.lyrics_back_Image);
+        backImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 

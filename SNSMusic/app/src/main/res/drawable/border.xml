@@ -3,7 +3,7 @@
     <item>
         <shape android:shape="rectangle">
             <solid android:color="#CABBBBBB"/>
-            <corners android:radius="5dp" />
+
         </shape>
     </item>
 
@@ -13,7 +13,7 @@
         android:top="7dp"
         android:bottom="7dp">
         <shape android:shape="rectangle">
-            <solid android:color="@android:color/white"/>
+            <solid android:color="#DDFFFFFF"/>
             <corners android:radius="5dp" />
         </shape>
     </item>

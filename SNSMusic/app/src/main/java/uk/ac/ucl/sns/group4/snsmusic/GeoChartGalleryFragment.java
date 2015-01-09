@@ -1,43 +1,42 @@
 package uk.ac.ucl.sns.group4.snsmusic;
 
-import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 
+import android.support.v4.app.FragmentManager;
+
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
-
-import org.apache.commons.logging.Log;
 
 import java.util.ArrayList;
 
 import java.util.Random;
 
-import static uk.ac.ucl.sns.group4.snsmusic.R.color.purple;
+import uk.ac.ucl.sns.group4.snsmusic.fetch.AppLocationService;
+import uk.ac.ucl.sns.group4.snsmusic.fetch.DownloadImage;
+import uk.ac.ucl.sns.group4.snsmusic.fetch.GeoChartTrack;
+import uk.ac.ucl.sns.group4.snsmusic.fetch.GeoMetro;
+import uk.ac.ucl.sns.group4.snsmusic.fetch.LocationMetro;
+import uk.ac.ucl.sns.group4.snsmusic.fetch.TrackYoutube;
+import uk.ac.ucl.sns.group4.snsmusic.model.Metro;
+import uk.ac.ucl.sns.group4.snsmusic.model.Track;
 
 /**
  * Fragment to hold GeoChartTrack data
@@ -48,12 +47,13 @@ import static uk.ac.ucl.sns.group4.snsmusic.R.color.purple;
 public class GeoChartGalleryFragment extends Fragment {
     GridView mGridView;
     Spinner countrySpinner,metroSpinner;
-    ArrayList<Track> mItems;
+    TextView retryTextView;
+    ArrayList<Track> mTracks;
     ArrayList<Metro> mMetro;
     int page =1;
     boolean isLoading = false;
-    ImageDownloader imageThread;
-    String location = "London";
+    DownloadImage downloadImage;
+    String location = "Bristol";
     String country = "United Kingdom";
     int countryInitial,locationInitial;
 
@@ -62,25 +62,16 @@ public class GeoChartGalleryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        //setHasOptionsMenu(true);
+
+        new LocationTask().execute();
 
 
-        // download initial data track for London, United Kingdom and all available Metro
-        new SearchTask().execute(country,location,page + "");
-        new MetroTask().execute();
 
         // Prepare handler thread to download image data
-        imageThread = new ImageDownloader(new Handler());
-        imageThread.setListener(new ImageDownloader.Listener<ImageView>() {
-            public void onThumbnailDownloaded(ImageView imageView, Bitmap eventImage) {
-                if (isVisible()) {
-                    imageView.setImageBitmap(eventImage);
-                }
-            }
-        });
-        imageThread.start();
-        imageThread.getLooper();
 
+        downloadImage = new DownloadImage(new Handler());
+        downloadImage.start();
+        downloadImage.getLooper();
 
 
 }
@@ -94,51 +85,50 @@ public class GeoChartGalleryFragment extends Fragment {
 
         // Setup Track Gallery
         mGridView = (GridView)v.findViewById(R.id.gridView);
-        mGridView.setEmptyView(v.findViewById(R.id.event_preview_viewFlipper));
-        setupAdapter();
-        ViewFlipper viewFlipper = (ViewFlipper) v.findViewById(R.id.event_preview_viewFlipper);
-        viewFlipper.setOnClickListener(new View.OnClickListener() {
+        mGridView.setEmptyView(v.findViewById(R.id.gallery_loading_viewFlipper));
+
+        retryTextView = (TextView) v.findViewById(R.id.retry_textView);
+        retryTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mItems = null;
-                new SearchTask().execute(country,location,page + "");
-                new MetroTask().execute();
+                if(!isLoading) {
+                    mTracks = null;
+                    new SearchTask().execute(country, location, page + "");
+                    new MetroTask().execute();
+                }
             }
         });
+
+
+        setupGridAdapter();
+
 
         // If track click (not yet implemented) - andi
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> gridView, View view, int pos,
                                     long id) {
+            Track track = mTracks.get(pos);
+            Bitmap bitmap = null;
+            if (track.getImageUrl() == null) {
+                bitmap = downloadImage.getBitmap(track.getArtistName());
+            } else {
+                bitmap = downloadImage.getBitmap(track.getImageUrl());
+            }
 
-                Track item = mItems.get(pos);
-                Bitmap bitmap = null;
-                if (item.getImageUrl() == null) {
-                    bitmap = imageThread.getBitmap(item.getArtistName());
-                } else {
-                    bitmap = imageThread.getBitmap(item.getImageUrl());
-                }
 
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), LyricsMainActivity.class);
-                intent.putExtra("AA", bitmap);
-                intent.putExtra(LyricsMainActivity.TRACK_OBJECT, item);
-                startActivity(intent);
+            FragmentManager fm = getActivity()
+                    .getSupportFragmentManager();
 
-                /*try {
-                Intent intent = new Intent(Intent.ACTION_SEARCH);
-                intent.setPackage("com.google.android.youtube");
-                intent.putExtra("query", item.getArtistName()+" "+item.getTrackName());
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                } catch (ActivityNotFoundException e){
-                    String url = "https://www.youtube.com/results?search_query="+item.getArtistName().replace(" ","+")+"+"+item.getTrackName().replace(" ","+");
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(url));
-                    startActivity(intent);
+            TrackFragment trackDialog = TrackFragment
+                    .newInstance(track, bitmap);
+            trackDialog.show(fm,TrackFragment.TRACK_ITEM);
 
-                }*/
+
+
+
+
+
 
 
             }
@@ -154,22 +144,12 @@ public class GeoChartGalleryFragment extends Fragment {
         return v;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 
     // shutdown thread
     @Override
     public void onDestroy() {
         super.onDestroy();
-        imageThread.quit();
+        downloadImage.quit();
 
     }
 
@@ -178,25 +158,30 @@ public class GeoChartGalleryFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        imageThread.clearQueue();
+        downloadImage.clearQueue();
     }
 
 
 
     // track gallery adapter
-    void setupAdapter() {
+    void setupGridAdapter() {
         if (getActivity() == null || mGridView == null) return;
 
-        if (mItems != null) {
+        if (mTracks != null) {
 
             // create adapter
-            mGridView.setAdapter(new ItemAdapter(mItems));
+            mGridView.setAdapter(new GridAdapter(mTracks));
+            if (mGridView.getLastVisiblePosition() > 0){
+                for (int i = mGridView.getLastVisiblePosition() + 1 ; i < mGridView.getLastVisiblePosition() + 11; i++ ){
+                    cacheNextImage(i);
+                }
+
+            }
 
 
 
             // to get more data if user already reach end of chart
             mGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                private int lastFirstVisibleItem = 0;
                 private int currentFirstVisibleItem;
                 private int currentVisibleItemCount;
                 private int currentScrollState;
@@ -229,6 +214,23 @@ public class GeoChartGalleryFragment extends Fragment {
                         }
                     }
 
+                    int startCacheItem = this.currentFirstVisibleItem - 10;
+                    if (startCacheItem < 0){
+                        startCacheItem = 0;
+                    }
+
+                    int endCacheItem = this.currentFirstVisibleItem + this.currentVisibleItemCount + 10;
+                    if (endCacheItem > this.currentTotalItemCount){
+                        endCacheItem = this.currentTotalItemCount;
+                    }
+
+                    for (int i = startCacheItem ; i < this.currentFirstVisibleItem; i++ ){
+                        cacheNextImage(i);
+                    }
+
+                    for (int i = this.currentFirstVisibleItem+this.currentVisibleItemCount ; i < endCacheItem; i++ ){
+                        cacheNextImage(i);
+                    }
 
 
 
@@ -240,6 +242,16 @@ public class GeoChartGalleryFragment extends Fragment {
         } else {
             mGridView.setAdapter(null);
         }
+    }
+
+
+    void cacheNextImage(int i){
+        if (mTracks.get(i).getImageUrl() == null){
+            downloadImage.cacheImage(mTracks.get(i).getArtistName());
+        } else {
+            downloadImage.cacheImage(mTracks.get(i).getImageUrl());
+        }
+
     }
 
 
@@ -272,14 +284,14 @@ public class GeoChartGalleryFragment extends Fragment {
 
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (!(isLoading || countryInitial == position)) {
+                    if (!(countryInitial == position)) {
                         countryInitial = position;
                         setupMetroSpinner(position,0);
                         country = mMetro.get(position).getCountry();
                         location = mMetro.get(position).getLocation().get(0);
                         page = 1;
-                        mItems = null;
-                        setupAdapter();
+                        mTracks = null;
+                        setupGridAdapter();
                         new SearchTask().execute(country, location, page + "");
                     }
                 }
@@ -319,8 +331,8 @@ public class GeoChartGalleryFragment extends Fragment {
                         locationInitial = position;
                         location = mMetro.get(countrySpinner.getSelectedItemPosition()).getLocation().get(position);
                         page = 1;
-                        mItems = null;
-                        setupAdapter();
+                        mTracks = null;
+                        setupGridAdapter();
                         new SearchTask().execute(country,location,page + "");
                     }
                 }
@@ -352,20 +364,43 @@ public class GeoChartGalleryFragment extends Fragment {
             return new GeoChartTrack().getChart(country,location,page);
 
         }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (retryTextView != null) {
+                retryTextView.setVisibility(View.GONE);
+            }
+            if (countrySpinner !=null){
+                countrySpinner.setEnabled(false);
+                metroSpinner.setEnabled(false);
+            }
+        }
+
         @Override
         protected void onPostExecute(ArrayList<Track> items){
             isLoading = false;
-            if (mItems == null){
-                mItems = items;
-                setupAdapter();
+            if (mTracks == null){
+                mTracks = items;
+                setupGridAdapter();
+                if (items.size() == 0){
+                    retryTextView.setVisibility(View.VISIBLE);
+                }
             }
             else if (page == 1) {
-                mItems = items;
-                ((ItemAdapter) mGridView.getAdapter()).notifyDataSetChanged();
+                mTracks = items;
+                ((GridAdapter) mGridView.getAdapter()).notifyDataSetChanged();
+                if (items.size() == 0){
+                    retryTextView.setVisibility(View.VISIBLE);
+                }
             }
             else {
-                mItems.addAll(items);
-                ((ItemAdapter)mGridView.getAdapter()).notifyDataSetChanged();
+                mTracks.addAll(items);
+                ((GridAdapter)mGridView.getAdapter()).notifyDataSetChanged();
+            }
+            if (countrySpinner !=null){
+                countrySpinner.setEnabled(true);
+                metroSpinner.setEnabled(true);
             }
 
         }
@@ -383,16 +418,54 @@ public class GeoChartGalleryFragment extends Fragment {
         protected void onPostExecute(ArrayList<Metro> items){
             mMetro = items;
             setupCountrySpinner();
+            ((MainActivity) getActivity()).Loading(true);
         }
+    }
+
+    private class LocationTask extends AsyncTask<String,Void,ArrayList<String>> {
+        Location gpsLocation;
+        @Override
+        protected void onPreExecute() {
+            AppLocationService appLocationService = new AppLocationService(getActivity().getBaseContext());
+            gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
+        }
+
+        @Override
+        protected ArrayList<String> doInBackground(String... params) {
+            ArrayList<String> gpsLocationMetro = null;
+
+            if (gpsLocation != null) {
+                double latitude = gpsLocation.getLatitude();
+                double longitude = gpsLocation.getLongitude();
+                gpsLocationMetro = ((LocationMetro) new LocationMetro()).getAddressFromLocation(latitude,longitude,getActivity().getBaseContext());
+            }
+
+            return gpsLocationMetro;
+        }
+
+
+
+        @Override
+        protected void onPostExecute(ArrayList<String> strings) {
+            if (strings.size()>0){
+                country = strings.get(0);
+                location = strings.get(1);
+            }
+            // download initial data track for London, United Kingdom and all available Metro
+            new SearchTask().execute(country,location,page + "");
+            new MetroTask().execute();
+
+
+        }
+
+
     }
 
 
 
-
-
     // Adapter to be used by Chart Gallery
-    private class ItemAdapter extends ArrayAdapter<Track> {
-        public ItemAdapter(ArrayList<Track> items) {
+    private class GridAdapter extends ArrayAdapter<Track> {
+        public GridAdapter(ArrayList<Track> items) {
             super(getActivity(), 0, items);
         }
 
@@ -408,10 +481,11 @@ public class GeoChartGalleryFragment extends Fragment {
                     .findViewById(R.id.item_imageView);
             imageView.setImageResource(R.drawable.placeholder);
             if (track.getImageUrl() == null) {
-                imageThread.queueImage(imageView, track.getArtistName());
+                imageView.setTag(track.getArtistName());
             } else {
-                imageThread.queueImage(imageView, track.getImageUrl());
+                imageView.setTag(track.getImageUrl());
             }
+            downloadImage.showImage(imageView);
             TextView detail1TextView = (TextView)convertView.findViewById(R.id.detail_1_textView);
             detail1TextView.setText(track.getTrackName());
             ImageView detail1ImageView = (ImageView)convertView
@@ -435,9 +509,14 @@ public class GeoChartGalleryFragment extends Fragment {
     // Adapter to be used by Country and City selection
 
     private class SpinnerAdapter extends ArrayAdapter<String> {
+            private boolean isCountry = false;
 
         public SpinnerAdapter(ArrayList <String> items )  {
             super(getActivity(), 0, items);
+            if (items.get(0).equals("-country")){
+                isCountry = true;
+            }
+
         }
 
         @Override
@@ -447,14 +526,11 @@ public class GeoChartGalleryFragment extends Fragment {
                         .inflate(R.layout.spinner_list, parent, false);
             }
             String item = getItem(position);
+            item = allGeo(item);
             TextView itemTextView = (TextView)convertView.findViewById(R.id.spinner_textView);
             itemTextView.setText(item);
             return convertView;
         }
-
-
-
-
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -463,11 +539,28 @@ public class GeoChartGalleryFragment extends Fragment {
                         .inflate(R.layout.spinner_list, parent, false);
             }
             String item = getItem(position);
+            item = allGeo(item);
             TextView itemTextView = (TextView)convertView.findViewById(R.id.spinner_textView);
             itemTextView.setBackgroundResource(R.color.purple);
             itemTextView.setTextColor(getActivity().getResources().getColor(android.R.color.white));
             itemTextView.setText(item);
+            ImageView itemImageView = (ImageView) convertView.findViewById(R.id.spinner_imageView);
+            if (isCountry) {
+                itemImageView.setImageResource(R.drawable.ic_country);
+            } else {
+                itemImageView.setImageResource(R.drawable.ic_city);
+            }
             return convertView;
+        }
+
+        String allGeo(String item){
+            if (item.equals("-city")) {
+                item = (String) getText(R.string.all_cities);
+            }
+            if (item.equals("-country")) {
+                item = (String) getText(R.string.all_countries);
+            }
+            return item;
         }
     }
 
