@@ -57,8 +57,8 @@ public class GeoEvent {
                 item.setVenueName(venueObj.getString("name"));
                 JSONObject locationObj = venueObj.getJSONObject("location");
                 JSONObject geoPointLocationObj = locationObj.getJSONObject("geo:point");
-                item.setVenueLongitude(geoPointLocationObj.getString("geo:lat"));
-                item.setVenueLatitude(geoPointLocationObj.getString("geo:long"));
+                item.setVenueLatitude(geoPointLocationObj.getString("geo:lat"));
+                item.setVenueLongitude(geoPointLocationObj.getString("geo:long"));
                 item.setVenueCity(locationObj.getString("city"));
                 item.setVenueCountry(locationObj.getString("country"));
                 item.setVenueStreet(locationObj.getString("street"));
