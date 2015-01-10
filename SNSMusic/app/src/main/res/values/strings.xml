@@ -17,7 +17,8 @@
     <string name="youtube">Youtube</string>
     <string name="lyrics">Lyric</string>
     <string name="loading">Loading ...</string>
-
+    <string name="copyright">All lyrics are property and copyright of their owners. All lyrics provided for educational purposes only.</string>
+    <string name="website"><a href="http://www.azlyrics.com">www.azlyrics.com</a></string>
     <string name="font_family">Arial</string>
 
 

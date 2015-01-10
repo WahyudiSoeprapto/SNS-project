@@ -5,78 +5,103 @@
             android:layout_height="match_parent" >
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/border">
+
+
+
+        <ImageView
+            android:id="@+id/lyrics_image"
+            android:layout_width="fill_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/placeholder"
+            android:scaleType="fitXY"
+            android:layout_margin="7dp"/>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@drawable/border">
+            android:background="#CCFFFFFF"
+            android:layout_marginTop="200dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginBottom="7dp"
+            >
+
+            <TextView
+                android:id="@+id/lyrics_artist"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:text="@string/artist"
+                android:gravity="center_horizontal"
+                android:textStyle="bold"
+                android:textSize="12pt"
+                android:paddingTop="20dp"/>
+
+            <TextView
+                android:id="@+id/lyrics_songname"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/track"
+                android:gravity="center_horizontal"
+                android:fontFamily="@string/font_family"
+                android:textSize="8pt"/>
+
+            <TextView
+                android:id="@+id/lyrics_song_content"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:text="@string/loading"
+                android:paddingTop="40dp"
+                android:paddingBottom="40dp"
+                android:textAlignment="center"
+                android:gravity="center_horizontal"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+
+                />
+
+            <TextView
+                android:id="@+id/hyperlink"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="@string/website"
+                android:gravity="center"
+                android:textSize="7pt"
+                android:background="#F2F0F0"
+                android:paddingTop="7dp"/>
 
 
 
-            <ImageView
-                android:id="@+id/lyrics_image"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:src="@drawable/placeholder"
-                android:scaleType="centerCrop"
-                android:layout_margin="7dp"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="@string/copyright"
+                android:gravity="center"
+                android:textSize="5pt"
+                android:background="#F2F0F0"
+                android:paddingBottom="40dp"
+                android:textStyle="bold"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"/>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="#CCFFFFFF"
-                android:layout_marginTop="200dp"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"
-                android:layout_marginBottom="7dp"
-                >
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/lyrics_artist"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="@string/artist"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:textSize="12pt"
-                    android:paddingTop="20dp"/>
-
-                <TextView
-                    android:id="@+id/lyrics_songname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/track"
-                    android:layout_gravity="center"
-                    android:fontFamily="@string/font_family"
-                    android:textSize="8pt"/>
-
-                <TextView
-                    android:id="@+id/lyrics_song_content"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:text="@string/loading"
-                    android:paddingTop="40dp"
-                    android:paddingBottom="40dp"
-                    android:textAlignment="center"
-                    android:gravity="center_horizontal"
-                    android:paddingLeft="7dp"
-                    android:paddingRight="7dp"
-
-                    />
-
-
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/lyrics_back_Image"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_back_menu"
-                android:layout_marginLeft="2.5dp"
-                android:layout_marginTop="5dp"
-                android:scaleType="fitXY"
-                android:clickable="true"/>
+        <ImageView
+            android:id="@+id/lyrics_back_Image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_back_menu"
+            android:layout_marginLeft="2.5dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="fitXY"
+            android:clickable="true"/>
 
     </RelativeLayout>
 

@@ -152,11 +152,11 @@ public class TrackFragment extends DialogFragment {
         }
     }
 
-
+    //Appending selected Track object to the LyricsActivity class using Intent;
     private void getLyrics() {
         Intent intent = new Intent();
         intent.setClass(getActivity(), LyricsActivity.class);
-        intent.putExtra("AA", bitmap);
+        intent.putExtra(LyricsActivity.TRACK_BITMAP, bitmap);
         intent.putExtra(LyricsActivity.TRACK_OBJECT, track);
         startActivity(intent);
         getDialog().dismiss();
